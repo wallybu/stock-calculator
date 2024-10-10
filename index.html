@@ -2,46 +2,87 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>解套计算器</title>
     <style>
+        @font-face {
+            font-family: 'MaoBiKaiTi';
+            src: url('path/to/MaoBiKaiTi.ttf') format('truetype');
+        }
         body {
-            font-family: 'STKaiti', 'KaiTi', sans-serif;
+            font-family: 'MaoBiKaiTi', 'STKaiti', 'KaiTi', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            padding: 10px;
+            box-sizing: border-box;
         }
         .container {
             background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 350px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         input, button {
-            display: block;
             width: 100%;
-            margin: 10px 0;
-            padding: 5px;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+            font-family: 'MaoBiKaiTi', 'STKaiti', 'KaiTi', sans-serif;
+        }
+        button {
+            background-color: #F2E8DC;
+            color: #4A4A4A;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #E8D8C3;
         }
         #result {
-            margin-top: 20px;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+        #result svg {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>解套计算器</h1>
-        <input type="number" id="principal" placeholder="本金 (元)">
-        <input type="number" id="currentValue" placeholder="当前账户市值 (元)">
-        <button onclick="calculate()">计算</button>
+        <div class="input-group">
+            <input type="number" id="principal" placeholder="本金 (元)">
+            <input type="number" id="currentValue" placeholder="当前账户市值 (元)">
+            <button onclick="calculate()">计算</button>
+        </div>
         <div id="result"></div>
     </div>
 
     <script>
         function calculate() {
+           
             const principal = parseFloat(document.getElementById('principal').value);
             const currentValue = parseFloat(document.getElementById('currentValue').value);
             
@@ -60,17 +101,17 @@
         function generateSVG(limitUpNeeded) {
             const advice = getAdvice(limitUpNeeded);
             return `
-            <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+            <svg width="100%" height="auto" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
                 <rect width="100%" height="100%" fill="#F2E8DC" />
                 
-                <text x="200" y="40" font-family="STKaiti, KaiTi" font-size="24" fill="#4A4A4A" text-anchor="middle">计算结果</text>
+                <text x="150" y="30" font-family="MaoBiKaiTi, STKaiti, KaiTi" font-size="18" fill="#4A4A4A" text-anchor="middle">计算结果</text>
                 
-                <text x="30" y="80" font-family="STKaiti, KaiTi" font-size="18" fill="#4A4A4A">还需要涨停板数:</text>
-                <text x="200" y="80" font-family="STKaiti, KaiTi" font-size="24" fill="#E74C3C" text-anchor="middle">${limitUpNeeded}</text>
+                <text x="20" y="60" font-family="MaoBiKaiTi, STKaiti, KaiTi" font-size="14" fill="#4A4A4A">还需要涨停板数:</text>
+                <text x="150" y="60" font-family="MaoBiKaiTi, STKaiti, KaiTi" font-size="18" fill="#E74C3C" text-anchor="middle">${limitUpNeeded}</text>
                 
-                <text x="30" y="120" font-family="STKaiti, KaiTi" font-size="16" fill="#4A4A4A">建议:</text>
-                <foreignObject x="30" y="140" width="340" height="150">
-                    <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: STKaiti, KaiTi; font-size: 14px; color: #4A4A4A;">
+                <text x="20" y="90" font-family="MaoBiKaiTi, STKaiti, KaiTi" font-size="14" fill="#4A4A4A">建议:</text>
+                <foreignObject x="20" y="100" width="260" height="90">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: MaoBiKaiTi, STKaiti, KaiTi; font-size: 12px; color: #4A4A4A;">
                         ${advice}
                     </div>
                 </foreignObject>
@@ -78,7 +119,7 @@
         }
 
         function getAdvice(limitUpNeeded) {
-    const advices = [
+            const advices = [
         "股市如赌场,只是更慢而已。至少在赌场,你输钱的时候还能喝免费的咖啡。",
         "解套需要的涨停板数量比你的智商还高,也许是时候考虑一下其他投资方式了。比如,买彩票?",
         "股市有风险,入市需谨慎。但显然,你已经把'谨慎'当成了'冲动'的同义词。",
@@ -90,8 +131,7 @@
         "别灰心,你的投资组合可能成为未来金融教科书中的反面教材。这也是一种贡献,不是吗?",
         "股市有涨有跌,但你的账户似乎只懂得一个方向。也许你应该考虑把显示器倒过来看?"
     ];
-    return advices[Math.floor(Math.random() * advices.length)];
-}
+    return advices[Math.floor(Math.random() * advices.length)];}
     </script>
 </body>
 </html>
